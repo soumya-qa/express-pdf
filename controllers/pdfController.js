@@ -48,10 +48,12 @@ exports.generatePDFFromHTML = async (req, res) => {
     *    @param [remoteContent] - Default true. Optional parameter to specify if there is no remote content. Performance will be opitmized for no remote content.
     */
     let html = req.body.html;
+    
     let options = {format: 'A4', printBackground: true};
     await convertHTMLToPDF(html, (pdf) => {
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdf);
     }, options);
+    
 }
 
