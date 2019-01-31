@@ -66,6 +66,7 @@ exports.generatePDFFromHTML = async (req, res) => {
     let scale = (req.body.scale) ? req.body.scale : 1;
 
     //console.log(html);
+    /*
     let options = {format: pageFormat, printBackground: true, margin: {
         top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft, emulateMedia: emulateMedia, landscape: landscape, scale: scale } 
     };
@@ -73,6 +74,22 @@ exports.generatePDFFromHTML = async (req, res) => {
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdf);
     }, options);
+    */
+
+   (async () => {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+  
+    //1. Create PDF from static HTML
+    const htmlContent = html;
+    await page.setContent(htmlContent);
+    let generatedPdf = await page.pdf({ format: pageFormat, printBackground: true, margin: {
+        top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft, landscape: landscape, scale: scale} })
+    await browser.close()
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(generatedPdf);
+  })()
     
 }
 
