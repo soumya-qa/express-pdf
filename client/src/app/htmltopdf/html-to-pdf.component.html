@@ -1,0 +1,85 @@
+<div class="col-md-5" style="margin-top:30px;">
+    <div class="row">
+        <form #htmltopdf="ngForm" (ngSubmit)="onSubmit(htmltopdf)">
+
+            <div class="form-group">
+                <textarea class="form-control" name="html" cols="500" rows="20" [(ngModel)]="html" required #htmlref = "ngModel" placeholder="Type your HTML here..."></textarea>
+                <span [hidden]="htmlref.valid || htmlref.pristine" class="alert alert-danger">This field is required.</span>
+            </div>
+
+            <h5>Other Params (Optional)</h5>
+
+            <div class="form-group">
+                <label for=""> Page Format : </label>
+                <select name="pageFormat" class="form-control">
+                    <option value="A0">A0</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="A4" selected>A4 (Default)</option>
+                    <option value="A5">A5</option>
+                    <option value="A6">A6</option>
+                    <option value="Letter">Letter</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Tabloid">Tabloid</option>
+                    <option value="Ledger">Ledger</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for=""> Margin Left : </label>
+                <input class="form-control" [(ngModel)]="marginLeft" type="number" name="marginLeft">
+            </div>
+            
+            <div class="form-group">
+                <label for=""> Margin Right : </label>
+                <input class="form-control" [(ngModel)]="marginRight" type="number" name="marginRight">
+            </div>
+            
+            <div class="form-group">
+                <label for=""> Margin Top : </label>
+                <input class="form-control" [(ngModel)]="marginTop" type="number" name="marginTop">
+            </div>
+
+            <div class="form-group">
+                <label for=""> Margin Bottom : </label>
+                <input class="form-control" [(ngModel)]="marginBottom" type="number" name="marginBottom">
+            </div>
+
+            <div class="form-group">
+                <label for=""> Emulate Media : </label>
+                <select class="form-control" [(ngModel)]="emulateMedia" name="emulateMedia">
+                    <option value="screen"> Screen </option>
+                    <option value="print"> Print </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for=""> Page Orientation : </label>
+                <select class="form-control" [(ngModel)]="pageOrientation" name="pageOrientation">
+                    <option value="landscape"> Landscape </option>
+                    <option value="portrait"> Portrait </option>
+                </select>
+            </div>
+    
+            <div class="form-group">
+                <label for=""> Page Scale : </label>
+                <input class="form-control" [(ngModel)]="pageScale" type="number" name="pageScale">
+            </div>
+
+            <div class="form-group">
+                <label for=""> Save file as (ignore .pdf) : </label>
+                <input class="form-control" [(ngModel)]="pdfName" type="text" name="pdfName">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" [disabled]="!htmltopdf.form.valid || isGenerating"> Submit </button>
+            </div>
+            
+        </form>
+    </div>
+
+    <div class="row">
+        <!-- <object [data]="generatedPdf" type="application/pdf"></object> -->
+    </div>
+</div>

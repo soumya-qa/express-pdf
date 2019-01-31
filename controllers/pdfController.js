@@ -18,17 +18,24 @@ exports.generatePDFFromURL =  async(req, res) => {
     let marginBottom = (req.body.marginBottom) ? req.body.marginBottom : 0;
     let marginLeft = (req.body.marginLeft) ? req.body.marginLeft : 0;
     let marginRight = (req.body.marginRight) ? req.body.marginRight : 0;
+    let emulateMedia = (req.body.emulateMedia) ? req.body.emulateMedia : 'screen';
+    let landscape = (req.body.landscape == 'landscape') ? true : false;
+    let scale = (req.body.scale) ? req.body.scale : 1; 
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    if(emulateMedia) {
+        await page.emulateMedia(emulateMedia);
+    }
     await page.goto(url, {waitUntil: 'networkidle2'});
   
+    //console.log(req.body);
     // This will save file in the disk.
     //await page.pdf({path: '4d.pdf', format: 'A4', printBackground: true});
 
     // This won't save in the disk will save in buffer.
-    const buffer = await page.pdf({format: pageFormat, printBackground: true,margin: {
-        top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft
+    const buffer = await page.pdf({format: pageFormat, printBackground: true, margin: {
+        top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft, landscape: landscape, scale: scale 
     }
     });
  
@@ -48,8 +55,20 @@ exports.generatePDFFromHTML = async (req, res) => {
     *    @param [remoteContent] - Default true. Optional parameter to specify if there is no remote content. Performance will be opitmized for no remote content.
     */
     let html = req.body.html;
-    
-    let options = {format: 'A4', printBackground: true};
+    // These are optional parameters.
+    let pageFormat = (req.body.pageFormat) ? req.body.pageFormat : 'A4';
+    let marginTop = (req.body.marginTop) ? req.body.marginTop : 0;
+    let marginBottom = (req.body.marginBottom) ? req.body.marginBottom : 0;
+    let marginLeft = (req.body.marginLeft) ? req.body.marginLeft : 0;
+    let marginRight = (req.body.marginRight) ? req.body.marginRight : 0;
+    let emulateMedia = (req.body.emulateMedia) ? req.body.emulateMedia : 'screen';
+    let landscape = (req.body.landscape == 'landscape') ? true : false;
+    let scale = (req.body.scale) ? req.body.scale : 1;
+
+    //console.log(html);
+    let options = {format: pageFormat, printBackground: true, margin: {
+        top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft, emulateMedia: emulateMedia, landscape: landscape, scale: scale } 
+    };
     await convertHTMLToPDF(html, (pdf) => {
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdf);
